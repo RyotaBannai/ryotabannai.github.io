@@ -1,3 +1,8 @@
+---
+layout: post
+title: Hello Smart People!
+---
+
 <h1>Hello Smart Poeple!</h1>
 
 Thank you all for having interest in my blogging!<br/>
