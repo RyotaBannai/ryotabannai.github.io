@@ -1,4 +1,4 @@
-# THis is personal blogging website on Github
+# THis is a personal blogging website on Github
 ### Created based on JelyII Now 
 ---
 ##### Author : Ryota Bannai
