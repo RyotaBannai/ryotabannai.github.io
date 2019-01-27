@@ -1,9 +1,12 @@
 ---
 layout: post
-title: Hello Smart People!
+title: First blog commit! Thanks!
+h1_title: First blog commit!! Thanks!
 ---
 
-<h1>First blog commit!! Thanks! </h1>
+{% comment %} Liquid way to comment out! page.h1_title is a custom variable {% endcomment %}
+{% comment %} If you add Hs tags they shows up on the blog list page {% endcomment %}
+<!--h2>{{ page.h1_title }}</h2-->
 
 <ul>
     <li>Thank you all for having interests in my blogging!</li>
@@ -15,4 +18,3 @@ title: Hello Smart People!
 </ul>
 
 I'll try my best to stick this awesome services, and seek out better things!
-
