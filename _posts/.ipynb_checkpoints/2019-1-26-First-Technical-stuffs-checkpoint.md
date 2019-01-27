@@ -40,7 +40,7 @@ export PATH="/usr/local/Cellar/ruby/2.0.0-p247/bin:$PATH"
     <li>User guide for Roughfy can be found <a href='https://bnhr.xyz/2017/03/25/add-syntax-highlighting-to-your-jekyll-site-with-rouge.html'>here</a></li>
 </ul>
 
-<h2>Issue 4: Run on another port other than 4000</h2>
+<h2>Issue 4: Run on an another port other than 4000</h2>
 <p><b>Solution</b>:</p>
 ```shell
 jekyll serve --port 4001

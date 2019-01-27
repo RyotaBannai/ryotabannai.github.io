@@ -4,9 +4,9 @@ title: About
 permalink: /about/
 ---
 
-I'm a Data Scientist and Programmer in L.A.<br>
-Earned B.S. in Japan, and seeking out M.S. in the U.S., hopefully started out as of on Fall 2019.<br>
-In the meanwhile, I'm chiefly active on Github and a couple blogging sites to share info.<br>
+I'm a Data Scientist and a Programmer in L.A.<br>
+Earned B.S. in Japan in 2016, and seeking out M.S. in the U.S. Hopefully, start out as of Fall 2019.<br>
+Meanwhile, I'm chiefly active on Github and a couple of blogging sites to share info.<br>
 
 
 ### More Information
