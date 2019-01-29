@@ -14,7 +14,7 @@ export PATH=$(brew --prefix ruby)/bin:$PATH
 ```
 <p><b>Note</b>: This code is only for Mac. The details is <a href="https://github.com/jekyll/jekyll/issues/1504">here</a></p>
 
-<h2>Issue 2: Showcase blog posts in descend order: from the latest to the oldest.</h2>
+<h2>Issue 2: Showcase blog posts in ascending order: from the oldest to the latest.</h2>
 <p><b>Solution</b>: <b>add reversed</b> after site.posts array. <u>Please get rid of backslashes\ I just needed these since Liquid detects them as operational tags without \.</u></p>
 
 ```liquid
