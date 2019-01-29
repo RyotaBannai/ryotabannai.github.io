@@ -1,0 +1,107 @@
+---
+layout: post
+title: A short journey of outlier detection
+---
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<style>
+.img_title{text-align: center;
+    color: #666;
+    font-size: 15px;
+    margin: 15px 0 20px;
+}
+</style>
+
+<h3>Quick overview of several methods for finding outliers</h3>
+<!--img src='../images/4.jpg'-->
+
+<h3>Table of Contents:</h3>
+
+<ul>
+    <li><a href="#objectives">Objectives</a></li>
+    <li><a href="#univariable">Outliers detection for univariable</a></li>
+    <li><a href="#linear_regression_models">Outliers detection for linear regression models</a></li>
+</ul>
+
+
+<h3 id="objectives">Objectives</h3>
+There are a bunch of methods available to catch anomal data depending on what we work on and which model we currently use. Being mindful to anomal data and is pivotal when we need precise statistics and models, since those data, such as an outlier, can hugely influence on mean, standard deviation and variance. In this article, we will experience three types of techniques:
+For univariable with Z-socre and IQR
+For linear regression models with simple leverage statistics, Cook's distance, and DFFITS, and
+For bivariable and hiher dimention with Robust covariance, Local Outlier Factor and Isolation Forest
+
+Our main objective is to obtain a bit further understanding than just to get ideas by reading articles, and to obtain insights from experiments. We also seek the ability to implement them so that we could optimize our algorithm when needed, and so that we could handle unexpected troubles while we are using open sources.
+
+
+<h3 id='univariable'>Univariable</h3>
+When it comes to dealing with univariable, our methods are straightforward. Since we have math knowledge from high school, we already knew how to handle outliers.
+<h4>IQR</h4>
+First way is IOR(Interquartile Range). Let X be an univariable, and a set of values, s.t. ```X=\{0,1,2,3,4,5,6,7,8,9,10,11,20\}```. With ```X```, we simply calculate Q1, Q2, and Q3. In this case, ```Q1=3```, ```Q2(median)=6```, and ```Q3=9```, and IQR is ```Q3-Q1=6```. Outlier is defined as
+$$Q1-1.5\ast IQR \; or\;  Q3+1.5\ast IQR,$$
+therefore in this case, if a values that is less than -6 or more than 18 is an outlier. In data set ```X```, 20 is an outlier.
+<h4>Z-Score</h4>
+Using Z-Score to detect such outlier is straightforward as well. The different from IQR is first to transform raw data into Z-score. Z-score is defined as<br/>
+<!--img src="https://latex.codecogs.com/gif.latex?z=\frac{x-\mu }{\sigma }" /-->
+{% comment %} Or you can just use ```codes``` {% endcomment %}
+$$z=\frac{x-\mu }{\sigma } ,$$
+<br/>
+where ```x``` is raw data, ```\mu``` is just mean of x, and ```\sigma``` is standard deviation of ```x```. Also an outlier is defined as<br>
+<p><b>x whose Z-Score is less than 1.0 or more than 3.0</b></p>
+In the data sample below codes, 30 is an outlier.
+
+<br/><br/>
+<script src="https://gist.github.com/RyotaBannai/3c321f645488fb5dd575add4592b7eee.js"></script>
+<br/>
+
+This is it for anomal detection as for univariable. The concept of Z-score deserves attention since it is used to calculate Mahalanobis distance. Furthermore, Mahalanobis distance is a basic concept when it comes to compare the performance of Robust covariance as anormaly detection.
+
+<h3 id='linear_regression_models'>Linear Regression Models</h3>
+Next we will look at anomal detection techniques for linear regression model, specifically, leverage statistics, Cook's distance, and DFFITS. The their purpose is the same, however, their approaches are different.
+Leverage Statistics
+Leverage statistics is a diagnostic on how far away / how influential data is from others. Here we would like to observe Leverage point, which is the data point that doesn't influence on the regression model, but does on mean, variance of data set, and influence point, which is the data point that does both of them. We will measure Observation Influence of each point, and detect anomly data which is highly influential to the amount of information extracted from observations.
+<p style='text-align: center;'><img src='../images/1.png' style="height: 50%;width: 50%;"></p>
+<p class='img_title'>Influence point (blue point) v.s. Leverage point (red point)</p>
+<br>
+Let ```X``` be a design matrix, and ```x``` be a variable of ```X```, ```x\subseteq X```. In leverage Statistics, we calculate a leverage score and compare it with a cutoff value. A score that is surpasses cutoff value is either leverage or influence point. The cutoff value is defined as
+$$\frac{2(Global\, average\,  Observation\,  Influence(OI))}{n}, OI = Trace(H),$$
+where n is the number of observation, H is a projection matrix of X. The projection matrix ```H=X(X^TX)^{-1}X^T```, and leverage scores of each observation ```h_{i(i)``` is the diagonal entry of ```H_{i(i)```.
+To implement this, we first make simple sample data, and add one influence point with color red. If a leverage score surpasses cutoff value, then we color it red as well.
+
+<br/><br/>
+<script src="https://gist.github.com/RyotaBannai/840d8c03727696c6184edf6ddfb7d610.js"></script>
+<br/>
+<p style='display: flex;align-content: center;'>
+    <img src='../images/2.png' style='width: 50%;height: 50%;'>
+    <img src='../images/3.png' style='width: 50%;height: 50%;'>
+</p>
+<p class='img_title'>Fig. left: Plot data points with influence point (red). Fig. right: Applying leverage statistics and detecting leverage and influence points(red)<p>
+From what we can see on the right figure, the highly deviated data points are detected as leverage points as well as influence point.
+
+<h4>DFFITS</h3>
+When we have fitted values from some estimators, such as OLS, we can use DFFITS to find anomal points. As we calculate a score in leverage statistics, we do the same in DFFITS. DFFITS measures a score with the difference between fitted values of two different estimators. The formula for its score is defined as
+$$DFFITS_i = \frac{\hat{y}_i - \hat{y}_{i(i)}}{s\sqrt{h_{i(i)}}},$$
+where, ```\hat{y}_i``` is predicted a i-th fitted value predicted by an estimator based on data set including i-th observation, while ```\hat{y}_{i(i)}``` is a fitted value predicated by an estimator based data set excluding i-th observation. ```s``` is a standard deviation of errors of independent values and fitted values predicted by an estimator based data set excluding i-th observation.
+The above formula is equal to,
+$$DFFITS_i = t_i\sqrt{\frac{\hat{h}_{i(i)}}{1-\hat{h}_{i(i)}}}$$
+where ```t_i``` is a R-student.
+In codes below, we calculate DFFITS with i-th observation. Therefore ```t_i``` is called the internally studentized residual.
+<br/><br/>
+<script src="https://gist.github.com/RyotaBannai/dca162ead7dc4c7b3b69dc6360b2c0ce.js"></script>
+<br/>
+
+<h4>Cook's Distance</h3>
+As the case of DFFITS, when we already knew the fitted values, Cook's Distance is a useful method as well. This method measure a score by calculating squared errors between i-th fitted value predicted by an estimator based on data set including i-th observation, and a fitted value predicated by an estimator based data set excluding i-th observation for all i-th data. Therefore, the formula is defined as
+$$D_i =  \frac{\sum _{j=1}^{n}(\hat{y}_j - \hat{y}_{j(i)})^2}{ps^2}$$
+where ```p``` is the number of variables, ```s^2``` is the mean squared error of the regression model, and the fitted values are defined as the same as in DFFITS. The cutoffs value is recommenced as ```\frac{2(p+1)}{n}``` for a small sample size, and ```\frac{3(p+1)}{n}```for a large sample size.
+The above formula is equal to
+$$D_i = \frac{t_i}{ps^2}\sqrt{\frac{\hat{h}_{i(i)}}{1-\hat{h}_{i(i)}}}$$
+Terms for this are the same as above.
+<br/><br/>
+<script src="https://gist.github.com/RyotaBannai/936755846bf387b15f02a3ae07d6394a.js"></script>
+<br/>
+
+Cook's Distance and DFFITS are available in Statsmodels. Just for an experiment to look at how different the results between Cook's Distance and DFFITS are, now we go through the codes below. We use Fall detection data set from Kaggle(source). For the sake of convenience, we pick up TIME(monitoring time) and HR(heart rate), and check the cooks_d and dffits values. In both plot, the blue line is a regression line of OLS. Cook's distance detects far leverage data and high variant data points in terms of HR values, while DFFITS tends to detect data points above the regression line and doesn't detect the data point located at far upper right side.
+<br/><br/>
+<script src="https://gist.github.com/RyotaBannai/0e94870c7eb9e7305e446fc08a9090d6.js"></script>
+<br/>
