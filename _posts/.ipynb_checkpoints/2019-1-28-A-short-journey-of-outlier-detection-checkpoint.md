@@ -2,6 +2,8 @@
 layout: post
 title: A short journey of outlier detection
 ---
+<h3>Quick overview of several methods for finding outliers</h3>
+
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
@@ -13,7 +15,6 @@ title: A short journey of outlier detection
 }
 </style>
 
-<h3>Quick overview of several methods for finding outliers</h3>
 <!--img src='../images/4.jpg'-->
 
 <h3>Table of Contents:</h3>
