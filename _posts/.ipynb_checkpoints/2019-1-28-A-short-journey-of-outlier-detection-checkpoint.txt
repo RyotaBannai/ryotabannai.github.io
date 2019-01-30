@@ -79,7 +79,7 @@ To implement this, we first make simple sample data, and add one influence point
 <p class='img_title'>Fig. left: Plot data points with influence point (red). Fig. right: Applying leverage statistics and detecting leverage and influence points(red)<p>
 From what we can see on the right figure, the highly deviated data points are detected as leverage points as well as influence point.
 
-<h4>DFFITS</h3>
+<h4>DFFITS</h4>
 When we have fitted values from some estimators, such as OLS, we can use DFFITS to find anomal points. As we calculate a score in leverage statistics, we do the same in DFFITS. DFFITS measures a score with the difference between fitted values of two different estimators. The formula for its score is defined as
 $$DFFITS_i = \frac{\hat{y}_i - \hat{y}_{i(i)}}{s\sqrt{h_{i(i)}}},$$
 where, ```\hat{y}_i``` is predicted a i-th fitted value predicted by an estimator based on data set including i-th observation, while ```\hat{y}_{i(i)}``` is a fitted value predicated by an estimator based data set excluding i-th observation. ```s``` is a standard deviation of errors of independent values and fitted values predicted by an estimator based data set excluding i-th observation.
@@ -91,7 +91,7 @@ In codes below, we calculate DFFITS with i-th observation. Therefore ```t_i``` i
 <script src="https://gist.github.com/RyotaBannai/dca162ead7dc4c7b3b69dc6360b2c0ce.js"></script>
 <br/>
 
-<h4>Cook's Distance</h3>
+<h4>Cook's Distance</h4>
 As the case of DFFITS, when we already knew the fitted values, Cook's Distance is a useful method as well. This method measure a score by calculating squared errors between i-th fitted value predicted by an estimator based on data set including i-th observation, and a fitted value predicated by an estimator based data set excluding i-th observation for all i-th data. Therefore, the formula is defined as
 $$D_i =  \frac{\sum _{j=1}^{n}(\hat{y}_j - \hat{y}_{j(i)})^2}{ps^2}$$
 where ```p``` is the number of variables, ```s^2``` is the mean squared error of the regression model, and the fitted values are defined as the same as in DFFITS. The cutoffs value is recommenced as ```\frac{2(p+1)}{n}``` for a small sample size, and ```\frac{3(p+1)}{n}```for a large sample size.
